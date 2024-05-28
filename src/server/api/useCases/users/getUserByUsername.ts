@@ -5,6 +5,10 @@ export default async function getUserByUsername(username: string) {
     where: {
       username,
     },
+    include: {
+      habits: true,
+      days: true,
+    },
   });
 
   return user;

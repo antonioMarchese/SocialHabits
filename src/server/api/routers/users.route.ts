@@ -31,6 +31,6 @@ export const usersRouter = createTRPCRouter({
   }),
   me: privateProcedure.query(async ({ ctx }) => {
     const { username } = ctx;
-    return getUserByUsername(username);
+    return await getUserByUsername(username);
   }),
 });
