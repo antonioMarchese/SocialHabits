@@ -20,7 +20,12 @@ export default function LogoutButton() {
   }
 
   return (
-    <Button type="button" onClick={handleLogout} className="w-full">
+    <Button
+      type="button"
+      variant={"alt"}
+      onClick={handleLogout}
+      className="w-full"
+    >
       Sair
     </Button>
   );

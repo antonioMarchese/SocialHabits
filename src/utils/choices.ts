@@ -8,4 +8,12 @@ export const LOGIN_ERROR_MESSAGES = {
   WRONG_CREDENTIALS: "Senha e/ou nome de usuário inválidos",
 };
 
-export const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
+export const weekDays = [
+  "Domingo",
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
+];
