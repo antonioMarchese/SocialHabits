@@ -170,12 +170,12 @@ export default function HabitsCard() {
                   >
                     <PencilSquareIcon className="size-5" />
                   </button>
-                  <button
+                  {/* <button
                     className="text-red-500/80 hover:text-red-500/100 transition-all duration-200"
                     type="button"
                   >
                     <TrashIcon className="size-5" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))}

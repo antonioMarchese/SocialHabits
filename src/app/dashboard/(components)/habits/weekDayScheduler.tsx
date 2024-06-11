@@ -17,7 +17,7 @@ export default function WeekDayScheduler() {
           {weekDays.map((day, index) => (
             <p
               key={index}
-              className="text-zinc-300 font-light text-[8px] 2xs:text-[10px] sm:text-xs xl:text-sm 2xl:text-lg text-center"
+              className="text-zinc-300 font-light text-[10px] sm:text-xs xl:text-sm 2xl:text-lg text-center"
             >
               {day.slice(0, 3)}
             </p>
