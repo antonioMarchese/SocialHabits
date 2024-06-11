@@ -39,7 +39,6 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -51,7 +50,6 @@ export default function LoginForm() {
     onSuccess(data, variables, context) {
       console.info("Login realizado com sucesso!");
       console.info({ data });
-      setIsLoading(false);
       router.push("/dashboard");
     },
     onError(error, variables, context) {
@@ -63,12 +61,10 @@ export default function LoginForm() {
         form.setError("password", { message: error.message });
       }
       console.error({ error });
-      setIsLoading(false);
     },
   });
 
   async function handleSubmit(data: LoginFormData) {
-    setIsLoading(true);
     loginMutation.mutate(data);
   }
 
@@ -136,7 +132,8 @@ export default function LoginForm() {
             id="signUpButton"
             className="w-full h-12 mt-2 bg-violet-600 hover:bg-violet-700 focus:bg-violet-500"
             type="submit"
-            disabled={isLoading}
+            disabled={loginMutation.isPending}
+            isLoading={loginMutation.isPending}
           >
             Entrar
           </Button>

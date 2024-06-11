@@ -35,7 +35,7 @@ const createQueryClient = () =>
         refetchOnWindowFocus: "always",
         retry: 2,
         gcTime: 1000 * 60 * 60 * 24,
-        staleTime: Infinity,
+        staleTime: 1000 * 60 * 60 * 3,
       },
     },
   });

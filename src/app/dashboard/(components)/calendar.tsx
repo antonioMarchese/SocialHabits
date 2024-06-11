@@ -3,8 +3,8 @@ import { generateDatesFromMonthBegining } from "@/utils/generateDatesFromMonthBe
 import dayjs from "dayjs";
 import { useState } from "react";
 import ContainerHeader from "./containerHeader";
-import { useHabitStore } from "@/store/useHabitStore";
-import clsx from "clsx";
+import CalendarCell from "./days/calendarCell";
+import { useProfileDayLogs } from "@/hooks/useProfileDayLogs";
 import { api } from "@/trpc/react";
 
 export default function Calendar() {
@@ -12,13 +12,17 @@ export default function Calendar() {
   const [dates, setDates] = useState(() => {
     return generateDatesFromMonthBegining(today.toString());
   });
-  const { setHabitDate } = useHabitStore();
-  const { data: habits } = api.habits.getAll.useQuery();
-  console.info({ habits });
 
-  function handleSetHabitDate(date: Date) {
-    setHabitDate(dayjs(date));
-  }
+  const { dayLogs } = useProfileDayLogs();
+
+  const { data: todayHabits } = api.habits.dayHabits.useQuery(
+    {
+      day: today.startOf("day").toString(),
+    },
+    {
+      staleTime: 1000 * 60 * 60 * 6,
+    }
+  );
 
   return (
     <div className="w-full flex-1 flex flex-col gap-2 px-2 py-4 border border-zinc-600 rounded-lg">
@@ -37,47 +41,34 @@ export default function Calendar() {
           </p>
         ))}
       </div>
-      <div className="grid grid-cols-7 divide-x divide-y divide-zinc-500 border-b border-r border-zinc-500">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 xl:gap-4">
         {dates.map((date, index) => {
-          const currentDate = dayjs(date);
-          const dateMonth = currentDate.month();
+          const dayLog = dayLogs?.find((dayLog) =>
+            dayjs(dayLog.date).startOf("day").isSame(dayjs(date))
+          );
+          const isToday = dayjs(date).isSame(today.startOf("day").toDate());
+
+          if (isToday) {
+            return (
+              <CalendarCell
+                amount={todayHabits?.habits.length ?? 0}
+                completed={todayHabits?.completedHabits.length ?? 0}
+                date={date}
+              />
+            );
+          }
+
           return (
-            <button
-              type="button"
-              onClick={() => handleSetHabitDate(date)}
-              key={index}
-              className={clsx(
-                "first:border-t first:border-l first:border-zinc-500 relative flex items-center flex-col px-1 py-1 md:py-2 overflow-hidden justify-start hover:cursor-pointer h-10 md:h-20 gap-2 disabled:cursor-not-allowed",
-                {
-                  "bg-zinc-900 hover:bg-zinc-800":
-                    currentDate.date() === dayjs().date(),
-                  "hover:bg-zinc-900": currentDate.date() !== dayjs().date(),
-                }
-              )}
-            >
-              {dateMonth === today.month() && (
-                <>
-                  <p className="w-full text-left text-xs text-zinc-300">
-                    {currentDate.format("DD")}
-                  </p>
-                  <ul className="hidden text-[10px] w-full items-center justify-center md:flex flex-col px-1">
-                    {habits
-                      ?.filter((habit) =>
-                        habit.habit_week_days.some(
-                          (day) =>
-                            day.week_day === currentDate.day() &&
-                            habit.created_at <= new Date(date)
-                        )
-                      )
-                      .map((habit, index) => (
-                        <li key={index} className="w-full text-left truncate">
-                          {habit.title}
-                        </li>
-                      ))}
-                  </ul>
-                </>
-              )}
-            </button>
+            <CalendarCell
+              amount={dayLog ? dayLog.habits.length : 0}
+              completed={
+                dayLog
+                  ? dayLog.habits.filter((logHabit) => logHabit.completed)
+                      .length
+                  : 0
+              }
+              date={date}
+            />
           );
         })}
       </div>

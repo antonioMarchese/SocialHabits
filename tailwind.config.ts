@@ -53,11 +53,26 @@ const config = {
             transform: "scale(1)",
           },
         },
+        opacityPass: {
+          0: {
+            opacity: "100%",
+          },
+          "50%": {
+            opacity: "70%",
+          },
+          "100%": {
+            opacity: "100%",
+          },
+        },
       },
       animation: {
         slideDown: "slideDown 0.3s ease-out",
         slideUp: "slideUp 0.3s ease-out",
         contentShow: "grow 150ms linear",
+        opacityPass: "opacityPass 1.2s infinite",
+      },
+      screens: {
+        "2xs": "400px",
       },
     },
   },

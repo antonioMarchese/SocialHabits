@@ -19,6 +19,7 @@ model Users {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  DayLog     DayLog[]
 
   @@map("users")
 }
@@ -29,6 +30,7 @@ model Habits {
   user_id         String
   habit_week_days HabitWeekDays[] // recurrency
   day_habits      DayHabits[]
+  logs            HabitLog[]
 
   user Users @relation(fields: [user_id], references: [id])
 
@@ -44,7 +46,7 @@ model HabitWeekDays {
   week_day Int // [0, 1, 2, 3, 4, 5, 6]
   habit_id String
 
-  habit Habits @relation(fields: [habit_id], references: [id])
+  habit Habits @relation(fields: [habit_id], references: [id], onDelete: Cascade)
 
   @@unique([habit_id, week_day])
   @@map("habit_week_days")
@@ -68,9 +70,35 @@ model DayHabits {
   habit_id String
   day_id   String
 
-  day   Days   @relation(fields: [day_id], references: [id])
+  day   Days   @relation(fields: [day_id], references: [id], onDelete: Cascade)
   habit Habits @relation(fields: [habit_id], references: [id])
 
   @@unique([day_id, habit_id])
   @@map("day_habits")
+}
+
+model HabitLog {
+  id String @id @default(uuid())
+
+  log_id    String
+  habit_id  String
+  completed Boolean @default(false)
+
+  log   DayLog @relation(fields: [log_id], references: [id])
+  habit Habits @relation(fields: [habit_id], references: [id])
+
+  @@map("habit_logs")
+}
+
+model DayLog {
+  id   String   @id @default(uuid())
+  date DateTime
+
+  user_id String
+  habits  HabitLog[]
+
+  user Users @relation(fields: [user_id], references: [id])
+
+  @@unique([date, user_id])
+  @@map("day_logs")
 }

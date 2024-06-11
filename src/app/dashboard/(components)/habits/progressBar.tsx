@@ -12,8 +12,9 @@ export default function ProgressBar({ progress }: ProgressBarProps) {
         {
           "w-0": progress < 0.1,
           "w-[20%] bg-violet-900": progress >= 0.2 && progress < 0.4,
-          "w-[40%] bg-violet-800": progress >= 0.4 && progress < 0.6,
-          "w-[60%] bg-violet-700": progress >= 0.6 && progress < 0.8,
+          "w-[40%] bg-violet-800/90": progress >= 0.4 && progress < 0.5,
+          "w-[50%] bg-violet-800": progress === 0.5,
+          "w-[60%] bg-violet-700": progress > 0.5 && progress < 0.8,
           "w-[80%] bg-violet-600": progress >= 0.8 && progress < 1,
           "w-full bg-violet-500 rounded-tr-md": progress === 1,
         }

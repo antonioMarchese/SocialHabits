@@ -22,8 +22,15 @@ export default async function getWeekDayHabits({
         },
       },
     },
-    include: {
+    select: {
+      habit_week_days: true,
       day_habits: true,
+      id: true,
+      title: true,
+      user: true,
+      created_at: true,
+      deleted_at: true,
+      updated_at: true,
     },
   });
 

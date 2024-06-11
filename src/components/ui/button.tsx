@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import Loader from "../loader";
 
 const buttonVariants = cva(
   "flex items-center justify-center rounded-[8px] md:text-[14px] text-[12px] font-bold gap-2 transition-colors focus-visible:outline-none disabled:pointer-events-none uppercase whitespace-nowrap hover:opacity-80 transition-opacity duration-300 ease-in-out",
@@ -60,8 +61,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
+        {isLoading && <Loader message="Carregando..." size="sm" />}
         {!isLoading && icon}
-        {children}
+        {!isLoading && children}
       </Comp>
     );
   }

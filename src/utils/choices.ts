@@ -1,3 +1,6 @@
+import { CalendarIcon, HomeIcon } from "@heroicons/react/24/outline";
+import { SectionProps } from "./types/section";
+
 export const REGISTER_ERROR_MESSAGES = {
   USERNAME_ALREDY_EXISTS: "Nome de usuário já utilizado",
   EMAIL_ALREDY_EXISTS: "Email já utilizado",
@@ -16,4 +19,19 @@ export const weekDays = [
   "Quinta-feira",
   "Sexta-feira",
   "Sábado",
+];
+
+export const sections: SectionProps[] = [
+  {
+    title: "Home",
+    icon: HomeIcon,
+    slug: "home",
+    href: "/dashboard",
+  },
+  {
+    title: "Calendário",
+    icon: CalendarIcon,
+    slug: "calendar",
+    href: "/dashboard/calendar",
+  },
 ];

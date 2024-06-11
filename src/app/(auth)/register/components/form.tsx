@@ -14,11 +14,17 @@ import {
 } from "@/components/ui/form";
 import { FormInput } from "@/components/formInput";
 import PasswordRulesTooltip from "./passwordToolTip";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { REGISTER_ERROR_MESSAGES } from "@/utils/choices";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const registerFormSchema = z
   .object({
@@ -65,14 +71,16 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const router = useRouter();
+
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   });
 
   const signUpMutation = api.users.register.useMutation({
     onSuccess(data, variables, context) {
-      console.info("Usuário criado com sucesso");
-      console.info({ data });
+      toast.success("Usuário criado com sucesso");
+      router.push("/");
     },
     onError(error, variables, context) {
       console.error({ error });
@@ -83,6 +91,8 @@ export default function RegisterForm() {
       if (error.message === REGISTER_ERROR_MESSAGES.EMAIL_ALREDY_EXISTS) {
         form.setError("email", { message: error.message });
       }
+
+      toast.error("Erro ao criar usuário");
     },
   });
 
