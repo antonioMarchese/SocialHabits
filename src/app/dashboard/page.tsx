@@ -34,7 +34,7 @@ export default function Home() {
         <HabitsCard />
         <WeekDayScheduler />
       </div>
-      <FeedContainer />
+      {/* <FeedContainer /> */}
       <CreateHabitsModal />
     </div>
   );
