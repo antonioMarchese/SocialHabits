@@ -5,7 +5,7 @@ import { z } from "zod";
 export const createHabitsSchema = z.object({
   userId: z.string(),
   title: z.string(),
-  weekDays: z.array(z.number()).min(0).max(6),
+  weekDays: z.array(z.number()).min(0).max(7),
 });
 
 export type CreateHabitsProps = z.infer<typeof createHabitsSchema>;

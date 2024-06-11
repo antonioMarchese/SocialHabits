@@ -1,17 +1,17 @@
 import { prisma } from "@/lib/prisma";
+import { HabitWithRelations } from "@/store/useHabitStore";
 import dayjs from "dayjs";
-import { z } from "zod";
 
-export const completedDayHabits = z.object({
-  day: z.string(),
-  userId: z.string(),
-});
-
-export type CompletedDayHabits = z.infer<typeof completedDayHabits>;
+export interface CompletedDayHabits {
+  habits: HabitWithRelations[];
+  day: string;
+  userId: string;
+}
 
 export default async function getCompletedDayHabits({
   day,
   userId,
+  habits,
 }: CompletedDayHabits) {
   const habitsDay = await prisma.days.findUnique({
     where: {
@@ -26,7 +26,11 @@ export default async function getCompletedDayHabits({
   });
 
   const completedHabits =
-    habitsDay?.day_habits.map((dayHabit) => dayHabit.habit_id) ?? [];
+    habitsDay?.day_habits
+      .filter((dayHabit) =>
+        habits.find((habit) => habit.id === dayHabit.habit_id)
+      )
+      .map((dayHabit) => dayHabit.habit_id) ?? [];
 
   return completedHabits;
 }

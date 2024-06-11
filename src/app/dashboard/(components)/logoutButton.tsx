@@ -11,6 +11,10 @@ export default function LogoutButton() {
   const logoutMutation = api.auth.logout.useMutation({
     onSuccess(data, variables, context) {
       utils.users.invalidate();
+      utils.habits.invalidate();
+      caches.keys().then((names) => {
+        names.forEach((name) => caches.delete(name));
+      });
       router.push("/");
     },
   });

@@ -13,8 +13,11 @@ import {
   createHabitInput,
   getDayHabitsInput,
   toggleCompletedInput,
+  updateHabitInput,
 } from "@/utils/types/habits";
 import getAllHabits from "../useCases/habits/getAllHabits";
+import updateHabit from "../useCases/habits/editHabit";
+import getHabitById from "../useCases/habits/getHabitById";
 
 export const habitsRouter = createTRPCRouter({
   create: privateProcedure.input(createHabitInput).mutation(async (opts) => {
@@ -33,6 +36,35 @@ export const habitsRouter = createTRPCRouter({
 
     return newHabit;
   }),
+  update: privateProcedure
+    .input(updateHabitInput)
+    .mutation(async ({ ctx, input }) => {
+      const { habitId, weekDays, title } = input;
+      const { username } = ctx;
+      const user = await getUserByUsername(username);
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Usuário não encontrado",
+        });
+      }
+
+      const habit = await getHabitById({ id: habitId });
+      if (!habit) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Hábito não encontrado",
+        });
+      }
+
+      const updatedHabit = await updateHabit({
+        habit,
+        weekDays,
+        title,
+      });
+
+      return updatedHabit;
+    }),
   getAll: privateProcedure.query(async ({ ctx }) => {
     const { username } = ctx;
 
@@ -67,6 +99,7 @@ export const habitsRouter = createTRPCRouter({
       });
 
       const completedHabits = await getCompletedDayHabits({
+        habits,
         day: dayjs(input.day).toString(),
         userId: user.id,
       });

@@ -1,3 +1,5 @@
+"use client";
+
 import GeneralModalRoot from "@/components/modal";
 import CreateHabitsForm from "./createHabitsForm";
 import { useHabitStore } from "@/store/useHabitStore";

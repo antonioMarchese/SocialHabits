@@ -30,16 +30,15 @@ export default function Home() {
     <main className="flex w-full min-h-screen flex-col items-center justify-center gap-10 p-10">
       <header className="w-full flex flex-col items-center justify-center">
         <p className="whitespace-normal text-zinc-400 font-light text-center md:text-sm text-xs flex flex-col gap-2">
-          <strong className="sm:text-3xl text-white whitespace-normal font-bold text-sm">
+          <strong className="text-3xl text-white whitespace-normal font-bold">
             Habits
           </strong>
-          uma plataforma social para ajudar você a criar e manter hábitos
-          saudáveis
+          ajuda você a criar e manter hábitos saudáveis
         </p>
       </header>
       <LoginForm />
       <footer className="w-full text-center text-white font-light">
-        Ainda não tem uma conta?{" "}
+        <p>Ainda não tem uma conta? </p>
         <Link
           href="/register"
           className="text-violet-500 font-bold no-underline hover:text-primary-light"
