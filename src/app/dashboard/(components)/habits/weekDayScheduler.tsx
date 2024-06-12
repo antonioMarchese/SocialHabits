@@ -24,7 +24,7 @@ export default function WeekDayScheduler() {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 h-full">
         {habits?.map((habit, id) => (
           <>
             <p className="font-light md:text-md max-w-full truncate">

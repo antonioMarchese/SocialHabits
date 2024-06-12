@@ -10,7 +10,7 @@ dayjs.extend(utc);
 export async function GET(request: NextRequest) {
   try {
     const users = await prisma.users.findMany();
-    const today = dayjs().subtract(1, "day");
+    const today = dayjs();
     const dayPromises = users.map(async (user) => {
       const dayLog = await createDayLog({ date: today, userId: user.id });
       await createHabitsLog({ date: today, userId: user.id });

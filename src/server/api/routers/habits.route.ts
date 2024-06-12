@@ -12,12 +12,14 @@ import toggleCompletedHabit, {
 import {
   createHabitInput,
   getDayHabitsInput,
+  getStreakInput,
   toggleCompletedInput,
   updateHabitInput,
 } from "@/utils/types/habits";
 import getAllHabits from "../useCases/habits/getAllHabits";
 import updateHabit from "../useCases/habits/editHabit";
 import getHabitById from "../useCases/habits/getHabitById";
+import getStreaks from "../useCases/habits/getStreak";
 
 export const habitsRouter = createTRPCRouter({
   create: privateProcedure.input(createHabitInput).mutation(async (opts) => {
@@ -125,5 +127,25 @@ export const habitsRouter = createTRPCRouter({
       }
 
       await toggleCompletedHabit({ habitId, userId: user.id });
+    }),
+  getStreaks: privateProcedure
+    .input(getStreakInput)
+    .query(async ({ ctx, input }) => {
+      const { username } = ctx;
+      const { day } = input;
+      const user = await getUserByUsername(username);
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Usuário não encontrado",
+        });
+      }
+
+      const streaks = await getStreaks({
+        userId: user.id,
+        date: dayjs(day).toDate(),
+      });
+
+      return streaks;
     }),
 });

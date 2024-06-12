@@ -18,3 +18,5 @@ export const getDayHabitsInput = z.object({
 export const toggleCompletedInput = z.object({
   habitId: z.string(),
 });
+
+export const getStreakInput = getDayHabitsInput;

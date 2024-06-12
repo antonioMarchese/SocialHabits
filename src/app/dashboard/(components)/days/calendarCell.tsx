@@ -69,8 +69,7 @@ export default function CalendarCell({
           "bg-violet-600 border-violet-500":
             completedPercent >= 60 && completedPercent < 80,
           "bg-violet-500 border-violet-400": completedPercent >= 80,
-          "border-zinc-100 border-[3px]": isCurrentDay,
-          "border-zinc-400 border-2": isSelected && !isCurrentDay,
+          "border-zinc-100 border-[3px]": isSelected,
         }
       )}
     >
