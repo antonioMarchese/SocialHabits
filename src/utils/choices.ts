@@ -21,17 +21,18 @@ export const weekDays = [
   "Sábado",
 ];
 
-export const sections: SectionProps[] = [
-  {
-    title: "Home",
-    icon: HomeIcon,
-    slug: "home",
-    href: "/dashboard",
-  },
-  {
-    title: "Calendário",
-    icon: CalendarIcon,
-    slug: "calendar",
-    href: "/dashboard/calendar",
-  },
-];
+export const homeSection: SectionProps = {
+  title: "Home",
+  icon: HomeIcon,
+  slug: "home",
+  href: "/dashboard",
+};
+
+export const calendarSection: SectionProps = {
+  title: "Calendário",
+  icon: CalendarIcon,
+  slug: "calendar",
+  href: "/dashboard/calendar",
+};
+
+export const sections: SectionProps[] = [homeSection, calendarSection];

@@ -1,6 +1,7 @@
 "use client";
 import { useHabitStore } from "@/store/useHabitStore";
 import { api } from "@/trpc/react";
+import dayjs from "dayjs";
 
 export const useProfileHabits = () => {
   const utils = api.useUtils();
@@ -29,9 +30,23 @@ export const useProfileHabits = () => {
       refetchOnWindowFocus: false,
     });
 
+  const { isFetching: isFetchingStreaks, data: streaks } =
+    api.habits.getStreaks.useQuery(
+      {
+        day: dayjs().startOf("day").toString(),
+      },
+      {
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+      }
+    );
+
   return {
     dayHabits,
     habits,
-    isFetching: isFetchingDayHabits || isFetchingHabits || isPending,
+    streaks,
+    isFetching:
+      isFetchingDayHabits || isFetchingHabits || isFetchingStreaks || isPending,
   };
 };

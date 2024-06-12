@@ -73,6 +73,7 @@ const config = {
       },
       screens: {
         "2xs": "400px",
+        "3xl": "1800px",
       },
     },
   },
