@@ -49,9 +49,10 @@ export default async function toggleCompletedHabit({
         id: dayHabit.id,
       },
     });
+    return null;
   } else {
     // Completar o hábito
-    await prisma.dayHabits.create({
+    return await prisma.dayHabits.create({
       data: {
         day_id: day.id,
         habit_id: habitId,

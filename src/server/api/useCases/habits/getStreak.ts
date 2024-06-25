@@ -31,9 +31,50 @@ export default async function getStreaks({ date, userId }: HabitsStreakProps) {
       ],
     },
     select: {
-      habit_week_days: true,
-      day_habits: {
+      logs: {
+        where: {
+          completed: true,
+          log: {
+            AND: [
+              {
+                date: {
+                  gte: weekStart,
+                },
+              },
+              {
+                date: {
+                  lt: weekEnd,
+                },
+              },
+            ],
+          },
+        },
         include: {
+          log: {
+            select: {
+              date: true,
+            },
+          },
+        },
+      },
+      day_habits: {
+        where: {
+          day: {
+            AND: [
+              {
+                date: {
+                  gte: weekStart,
+                },
+              },
+              {
+                date: {
+                  lt: weekEnd,
+                },
+              },
+            ],
+          },
+        },
+        select: {
           day: {
             select: {
               date: true,
@@ -42,20 +83,16 @@ export default async function getStreaks({ date, userId }: HabitsStreakProps) {
         },
       },
       id: true,
+      habit_week_days: true,
       title: true,
-      created_at: true,
-      deleted_at: true,
-      updated_at: true,
     },
   });
 
-  const parsedHabits = habits.map((habit) => ({
-    ...habit,
-    day_habits: habit.day_habits.filter(
-      (dayHabit) =>
-        dayjs(dayHabit.day.date).isAfter(weekStart) &&
-        dayjs(dayHabit.day.date).isBefore(weekEnd)
-    ),
+  const parsedHabits = habits?.map((habit) => ({
+    id: habit.id,
+    title: habit.title,
+    weekRate: habit.habit_week_days.length,
+    completed: habit.logs.length + habit.day_habits.length,
   }));
 
   return parsedHabits;

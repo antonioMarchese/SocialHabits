@@ -46,7 +46,7 @@ export const useProfileHabits = () => {
     dayHabits,
     habits,
     streaks,
-    isFetching:
-      isFetchingDayHabits || isFetchingHabits || isFetchingStreaks || isPending,
+    isFetching: isFetchingDayHabits || isFetchingHabits || isPending,
+    isFetchingStreaks,
   };
 };

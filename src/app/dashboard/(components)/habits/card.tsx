@@ -17,13 +17,15 @@ import DayLogCard from "../days/dayLogCard";
 
 export default function HabitsCard() {
   const { habitDate, toggleIsModalOpen, setSelectedHabit } = useHabitStore();
-  const { selectedDayLog } = useDayLogStore();
 
   const utils = api.useUtils();
 
   const { dayHabits: habits, isFetching } = useProfileHabits();
 
   const habitMutation = api.habits.toggleCompleted.useMutation({
+    /* onSuccess(data, variables, context) {
+      utils.habits.getStreaks.invalidate();
+    }, */
     onError(error, variables, context) {
       toast.error("Erro ao atualizar informação de hábito");
       console.error({ error });
@@ -53,6 +55,25 @@ export default function HabitsCard() {
           habits: oldData!.habits,
           completedHabits: [...newCompletedHabits],
         })
+      );
+      utils.habits.getStreaks.setData(
+        {
+          day: dayjs().startOf("day").toString(),
+        },
+        (oldData) =>
+          oldData?.map((streakHabit) => {
+            if (streakHabit.id === habitId) {
+              return {
+                ...streakHabit,
+                completed:
+                  streakHabit.completed +
+                  (newCompletedHabits.length > habits.completedHabits.length
+                    ? 1
+                    : -1),
+              };
+            }
+            return { ...streakHabit };
+          })
       );
     }
     habitMutation.mutate({ habitId });

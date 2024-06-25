@@ -20,6 +20,7 @@ import getAllHabits from "../useCases/habits/getAllHabits";
 import updateHabit from "../useCases/habits/editHabit";
 import getHabitById from "../useCases/habits/getHabitById";
 import getStreaks from "../useCases/habits/getStreak";
+import getHabitDayLogByInterval from "../useCases/dayLogs/getDayLogsByInterval";
 
 export const habitsRouter = createTRPCRouter({
   create: privateProcedure.input(createHabitInput).mutation(async (opts) => {
@@ -126,7 +127,36 @@ export const habitsRouter = createTRPCRouter({
         });
       }
 
-      await toggleCompletedHabit({ habitId, userId: user.id });
+      const completedHabit = await toggleCompletedHabit({
+        habitId,
+        userId: user.id,
+      });
+      if (completedHabit) {
+        // Check to create streak
+        const habit = await getHabitById({ id: habitId });
+        if (habit) {
+          const weekStart = dayjs().startOf("week").startOf("day");
+          const weekEnd = dayjs().endOf("week").startOf("day");
+
+          // Get habit recurrency
+          const weekDays = habit.habit_week_days.map((hwd) => hwd.week_day);
+
+          // Get habit week logs
+          const dayLogs = await getHabitDayLogByInterval({
+            startDate: weekStart,
+            endDate: weekEnd,
+            userId: user.id,
+            habitId,
+          });
+
+          if (dayLogs.length === weekDays.length - 1) {
+            // Daylogs store info about passed dates
+            // Create the streak
+          }
+        }
+      } else {
+        // if streak (habitId, currentWeek) -> delete
+      }
     }),
   getStreaks: privateProcedure
     .input(getStreakInput)
